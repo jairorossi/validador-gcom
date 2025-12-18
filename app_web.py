@@ -1,16 +1,18 @@
 import streamlit as st
 import requests
 
-# Configuração da Página
+# Configuração da Página (Aba do navegador)
 st.set_page_config(
-    page_title="Validador Fiscal GCOM",
+    page_title="Validador Fiscal - Jairo Rossi",
     page_icon="🏢",
     layout="centered"
 )
 
 # Título e Cabeçalho
-st.title("🏢 Validador Fiscal - GCOM")
+st.title("🏢 Validador Fiscal GCOM")
+st.markdown("### *Desenvolvido por Jairo Rossi*") # <--- Assinatura aqui!
 st.markdown("---")
+
 st.write("Digite o CNPJ abaixo para consultar o Regime Tributário correto para cadastro.")
 
 # Entrada de Dados
@@ -39,7 +41,7 @@ if st.button("Consultar CNPJ"):
                         if dados.get('status') == 'ERROR':
                             st.error(f"Erro na Receita: {dados.get('message')}")
                         else:
-                            # --- LÓGICA DE DECISÃO (Igual ao Desktop) ---
+                            # --- LÓGICA DE DECISÃO ---
                             simples_dados = dados.get('simples')
                             optante = False
                             
@@ -50,7 +52,7 @@ if st.button("Consultar CNPJ"):
                             st.subheader(f"{dados.get('nome')}")
                             st.text(f"Fantasia: {dados.get('fantasia', '---')}")
                             
-                            # Caixas de destaque baseadas no resultado
+                            # Caixas de destaque
                             if optante:
                                 st.success("✅ EMPRESA OPTANTE PELO SIMPLES NACIONAL")
                                 fed_value = "SIMPLES"
@@ -62,7 +64,6 @@ if st.button("Consultar CNPJ"):
 
                             st.markdown("### 📝 Preenchimento no GCOM")
                             
-                            # Criação de colunas para ficar bonito
                             col1, col2 = st.columns(2)
                             with col1:
                                 st.metric(label="[1] Regime Federal", value=fed_value)
