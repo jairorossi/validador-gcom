@@ -8,7 +8,7 @@ st.set_page_config(
     layout="centered" 
 )
 
-# Título e Créditos (em uma linha ou bloco próximo)
+# Título e Créditos
 st.markdown("#### Consulta CNPJ & Fiscal - Dev: Jairo Rossi | v3.0")
 
 # Input e Botão
@@ -52,7 +52,7 @@ if btn_consultar:
                                 reg_fed = "NORMAL"
                                 reg_est = "NORMAL"
 
-                            # --- EXIBIÇÃO ESTILO FICHA ---
+                            # --- EXIBIÇÃO VERTICAL ---
                             st.markdown("---")
                             
                             # Dados Principais
@@ -60,7 +60,7 @@ if btn_consultar:
                             st.write(f"**Fantasia:** {dados.get('fantasia', '')}")
                             st.write(f"**Situação:** {dados.get('situacao')}")
                             
-                            st.markdown("<br>", unsafe_allow_html=True) # Espaço
+                            st.markdown("<br>", unsafe_allow_html=True) 
                             
                             # Classificação Fiscal
                             st.markdown("**Classificação Fiscal:**")
@@ -69,12 +69,11 @@ if btn_consultar:
                             else:
                                 st.info(classif_fiscal)
 
-                            # Regimes
-                            c1, c2 = st.columns(2)
-                            with c1:
-                                st.write(f"**Regime Federal:** {reg_fed}")
-                            with c2:
-                                st.write(f"**Regime Estadual:** {reg_est}")
+                            # Regimes (AGORA UM EMBAIXO DO OUTRO)
+                            st.write(f"**Regime Federal:** {reg_fed}")
+                            # Se quiser um espaço maior entre eles, descomente a linha abaixo:
+                            # st.markdown("<br>", unsafe_allow_html=True)
+                            st.write(f"**Regime Estadual:** {reg_est}")
 
                             st.markdown("<br>", unsafe_allow_html=True)
 
