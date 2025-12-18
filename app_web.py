@@ -1,37 +1,34 @@
 import streamlit as st
 import requests
 
-# Configuração da Página
+# Configuração minimalista da página
 st.set_page_config(
-    page_title="Consulta CNPJ - Jairo Rossi",
+    page_title="Consulta CNPJ",
     page_icon="🔍",
     layout="centered"
 )
 
-# Título e Assinatura
-st.title("🔍 Consulta CNPJ & Regime Tributário")
-st.markdown("### *Desenvolvido por Jairo Rossi*") 
-st.markdown("---")
+# Layout compacto (Título e Assinatura na mesma linha visual)
+col_header, col_sign = st.columns([2,1])
+with col_header:
+    st.markdown("### 🔍 Consulta CNPJ")
+with col_sign:
+    st.caption("Dev: Jairo Rossi")
 
-st.write("Digite o CNPJ para identificar se o cliente é **Simples Nacional** ou **Regime Normal**.")
+# Entrada de Dados (Sem textos explicativos longos)
+cnpj_input = st.text_input("CNPJ:", max_chars=18, placeholder="Digite o CNPJ aqui")
 
-# Entrada de Dados
-cnpj_input = st.text_input("CNPJ do Cliente (somente números):", max_chars=18)
-
-# Botão de Ação
-if st.button("Pesquisar Regime"):
+if st.button("Consultar"):
     if not cnpj_input:
-        st.warning("Por favor, digite um CNPJ.")
+        st.warning("Informe um CNPJ.")
     else:
-        # Limpeza do CNPJ
         cnpj = "".join([c for c in cnpj_input if c.isdigit()])
         
         if len(cnpj) != 14:
-            st.error("ERRO: O CNPJ deve conter 14 dígitos.")
+            st.error("CNPJ inválido (deve ter 14 dígitos).")
         else:
-            with st.spinner('Consultando Receita Federal...'):
+            with st.spinner('Buscando...'):
                 try:
-                    # Consulta à API
                     url = f"https://www.receitaws.com.br/v1/cnpj/{cnpj}"
                     response = requests.get(url, timeout=10)
                     
@@ -39,47 +36,47 @@ if st.button("Pesquisar Regime"):
                         dados = response.json()
                         
                         if dados.get('status') == 'ERROR':
-                            st.error(f"Erro na Receita: {dados.get('message')}")
+                            st.error(f"Erro: {dados.get('message')}")
                         else:
-                            # --- LÓGICA DE DECISÃO ---
+                            # --- Lógica ---
                             simples_dados = dados.get('simples')
                             optante = False
-                            
                             if simples_dados and isinstance(simples_dados, dict):
                                 optante = simples_dados.get('optante', False)
                             
-                            # Exibição dos Dados
-                            st.subheader(f"{dados.get('nome')}")
-                            st.text(f"Fantasia: {dados.get('fantasia', '---')}")
-                            
-                            # Caixas de destaque
-                            if optante:
-                                st.success("✅ EMPRESA OPTANTE PELO SIMPLES NACIONAL")
-                                fed_value = "SIMPLES"
-                                est_value = "SIMPLES"
-                            else:
-                                st.info("ℹ️ EMPRESA DE REGIME NORMAL (Lucro Presumido/Real)")
-                                fed_value = "NORMAL"
-                                est_value = "NORMAL"
+                            # --- Exibição Compacta ---
+                            st.markdown("---")
+                            st.markdown(f"**{dados.get('nome')}**")
+                            st.caption(f"CNPJ: {dados.get('cnpj')} | {dados.get('municipio')}/{dados.get('uf')}")
 
-                            st.markdown("### 📝 Sugestão de Cadastro no GCOM")
-                            
+                            # Definição dos valores
+                            if optante:
+                                msg_status = "✅ SIMPLES NACIONAL"
+                                val_fed = "SIMPLES"
+                                val_est = "SIMPLES"
+                            else:
+                                msg_status = "ℹ️ NORMAL (Lucro Presumido/Real)"
+                                val_fed = "NORMAL"
+                                val_est = "NORMAL / RPA"
+
+                            # Exibe o Status Principal
+                            if optante:
+                                st.success(msg_status)
+                            else:
+                                st.info(msg_status)
+
+                            # Exibe os Regimes (Genérico)
+                            st.markdown("##### Regime Tributário")
                             col1, col2 = st.columns(2)
                             with col1:
-                                st.metric(label="[1] Regime Federal", value=fed_value)
+                                st.text_input("Federal", value=val_fed, disabled=True)
                             with col2:
-                                st.metric(label="[2] Regime Estadual", value=est_value)
-
-                            # Detalhes extras
-                            with st.expander("Ver detalhes completos (Endereço/Atividade)"):
-                                st.write(f"**Logradouro:** {dados.get('logradouro')}, {dados.get('numero')}")
-                                st.write(f"**Bairro:** {dados.get('bairro')} - {dados.get('municipio')}/{dados.get('uf')}")
-                                st.write(f"**Atividade:** {dados.get('atividade_principal', [{}])[0].get('text')}")
+                                st.text_input("Estadual", value=val_est, disabled=True)
 
                     elif response.status_code == 429:
-                        st.warning("Muitas consultas seguidas. Aguarde 1 minuto.")
+                        st.warning("Aguarde 1 min (limite de consultas).")
                     else:
-                        st.error("Erro de conexão com a API.")
+                        st.error("Erro na API.")
                         
                 except Exception as e:
-                    st.error(f"Erro técnico: {e}")
+                    st.error("Erro de conexão.")
