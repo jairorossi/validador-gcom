@@ -1,25 +1,25 @@
 import streamlit as st
 import requests
 
-# Configuração da Página (Aba do navegador)
+# Configuração da Página
 st.set_page_config(
-    page_title="Validador Fiscal - Jairo Rossi",
-    page_icon="🏢",
+    page_title="Consulta CNPJ - Jairo Rossi",
+    page_icon="🔍",
     layout="centered"
 )
 
-# Título e Cabeçalho
-st.title("🏢 Validador Fiscal GCOM")
-st.markdown("### *Desenvolvido por Jairo Rossi*") # <--- Assinatura aqui!
+# Título e Assinatura
+st.title("🔍 Consulta CNPJ & Regime Tributário")
+st.markdown("### *Desenvolvido por Jairo Rossi*") 
 st.markdown("---")
 
-st.write("Digite o CNPJ abaixo para consultar o Regime Tributário correto para cadastro.")
+st.write("Digite o CNPJ para identificar se o cliente é **Simples Nacional** ou **Regime Normal**.")
 
 # Entrada de Dados
 cnpj_input = st.text_input("CNPJ do Cliente (somente números):", max_chars=18)
 
 # Botão de Ação
-if st.button("Consultar CNPJ"):
+if st.button("Pesquisar Regime"):
     if not cnpj_input:
         st.warning("Por favor, digite um CNPJ.")
     else:
@@ -62,7 +62,7 @@ if st.button("Consultar CNPJ"):
                                 fed_value = "NORMAL"
                                 est_value = "NORMAL"
 
-                            st.markdown("### 📝 Preenchimento no GCOM")
+                            st.markdown("### 📝 Sugestão de Cadastro no GCOM")
                             
                             col1, col2 = st.columns(2)
                             with col1:
