@@ -8,8 +8,10 @@ st.set_page_config(
     layout="centered" 
 )
 
-# Título e Créditos
+# --- TÍTULO E AVISO ---
 st.markdown("#### Consulta CNPJ & Fiscal - Dev: Jairo Rossi | v3.0")
+# Aqui usamos HTML para forçar a cor vermelha e o tamanho pequeno
+st.markdown("<span style='color: red; font-size: 14px;'>Atenção: limite de consulta de 3 CNPJ por minuto</span>", unsafe_allow_html=True)
 
 # Input e Botão
 col_input, col_btn = st.columns([3, 1])
@@ -69,10 +71,8 @@ if btn_consultar:
                             else:
                                 st.info(classif_fiscal)
 
-                            # Regimes (AGORA UM EMBAIXO DO OUTRO)
+                            # Regimes (UM EMBAIXO DO OUTRO)
                             st.write(f"**Regime Federal:** {reg_fed}")
-                            # Se quiser um espaço maior entre eles, descomente a linha abaixo:
-                            # st.markdown("<br>", unsafe_allow_html=True)
                             st.write(f"**Regime Estadual:** {reg_est}")
 
                             st.markdown("<br>", unsafe_allow_html=True)
