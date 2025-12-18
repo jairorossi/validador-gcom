@@ -1,17 +1,16 @@
 import streamlit as st
 import requests
 
-# Configuração da página
+# Configuração da página (MANTIDA)
 st.set_page_config(
     page_title="Consulta CNPJ",
     page_icon="🏢",
     layout="centered" 
 )
 
-# --- TÍTULO E AVISO ---
-st.markdown("#### Consulta CNPJ & Fiscal - Dev: Jairo Rossi | v3.0")
-# Aqui usamos HTML para forçar a cor vermelha e o tamanho pequeno
-st.markdown("<span style='color: red; font-size: 14px;'>Atenção: limite de consulta de 3 CNPJ por minuto</span>", unsafe_allow_html=True)
+# --- TÍTULO E AVISO (AGORA CENTRALIZADOS) ---
+st.markdown("<h4 style='text-align: center;'>Consulta CNPJ & Fiscal - Dev: Jairo Rossi | v3.0</h4>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: red; font-size: 14px;'>Atenção: limite de consulta de 3 CNPJ por minuto</p>", unsafe_allow_html=True)
 
 # Input e Botão
 col_input, col_btn = st.columns([3, 1])
@@ -54,7 +53,7 @@ if btn_consultar:
                                 reg_fed = "NORMAL"
                                 reg_est = "NORMAL"
 
-                            # --- EXIBIÇÃO VERTICAL ---
+                            # --- EXIBIÇÃO VERTICAL (MANTIDA) ---
                             st.markdown("---")
                             
                             # Dados Principais
@@ -71,7 +70,7 @@ if btn_consultar:
                             else:
                                 st.info(classif_fiscal)
 
-                            # Regimes (UM EMBAIXO DO OUTRO)
+                            # Regimes (Um abaixo do outro)
                             st.write(f"**Regime Federal:** {reg_fed}")
                             st.write(f"**Regime Estadual:** {reg_est}")
 
